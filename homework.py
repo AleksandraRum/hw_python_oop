@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from typing import Type, Dict
+
 
 @dataclass
 class InfoMessage:
@@ -23,14 +25,15 @@ class InfoMessage:
             f' Длительность: {self.duration:.3f} ч.;'
             f' Дистанция: {self.distance:.3f} км;'
             f' Ср. скорость: {self.speed:.3f} км/ч;'
-            f' Потрачено ккал: {self.calories:.3f}.')
+            f' Потрачено ккал: {self.calories:.3f}.'
+        )
 
 
 class Training:
     """Базовый класс тренировки."""
-    M_IN_KM = 1000
-    LEN_STEP = 0.65
-    IN_MIN = 60
+    M_IN_KM: float = 1000
+    LEN_STEP: float = 0.65
+    IN_MIN: float = 60
 
     def __init__(self,
                  action: int,
@@ -67,8 +70,8 @@ class Training:
 
 class Running(Training):
     """Тренировка: бег."""
-    COEFF_KCAL_1 = 18
-    COEFF_KCAL_2 = 20
+    COEFF_KCAL_1: float = 18
+    COEFF_KCAL_2: float = 20
 
     def get_spent_calories(self) -> float:
         calories = ((self.COEFF_KCAL_1 * self.get_mean_speed()
@@ -80,8 +83,8 @@ class Running(Training):
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
-    COEFF_KCAL_W_1 = 0.035
-    COEFF_KCAL_W_2 = 0.029
+    COEFF_KCAL_W_1: float = 0.035
+    COEFF_KCAL_W_2: float = 0.029
 
     def __init__(self,
                  action: int,
@@ -101,9 +104,9 @@ class SportsWalking(Training):
 
 
 class Swimming(Training):
-    LEN_STEP = 1.38
-    COEFF_KCAL_SW_1 = 1.1
-    COEFF_KCAL_SW_2 = 2
+    LEN_STEP: float = 1.38
+    COEFF_KCAL_SW_1: float = 1.1
+    COEFF_KCAL_SW_2: float = 2
     """Тренировка: плавание."""
     def __init__(self,
                  action: int,
@@ -128,7 +131,7 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    type_training = {
+    type_training: Dict[str, Type[Training]] = {
         'RUN': Running,
         'WLK': SportsWalking,
         'SWM': Swimming,
